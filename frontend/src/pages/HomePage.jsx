@@ -4,9 +4,11 @@ import { AboutSection } from '../components/AboutSection';
 
 export const HomePage = () => {
   return (
-    <div>
+    <div className="bg-gradient-rainbow min-h-screen flex flex-col items-center justify-start">
       <HeroSection />
-      <AboutSection />
+      <div className="w-full max-w-4xl mx-auto p-6 mt-8 rounded-3xl bg-white/80 shadow-xl">
+        <AboutSection />
+      </div>
     </div>
   );
 };

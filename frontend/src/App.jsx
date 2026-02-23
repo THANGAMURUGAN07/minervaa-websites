@@ -65,7 +65,7 @@ const AppShell = () => {
       <ScrollToSection />
       <AdmissionPopup />
       <PageTransition />
-      <div className={`relative min-h-screen ${isFacilityDetail ? 'bg-white' : 'bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50'}`}>
+      <div className={`relative min-h-screen flex flex-col items-center justify-start ${isFacilityDetail ? 'bg-white' : 'bg-gradient-rainbow'}`}>
         {!isFacilityDetail && <FloatingParticles />}
 
         <Navigation 
@@ -73,21 +73,23 @@ const AppShell = () => {
           setIsMenuOpen={setIsMenuOpen}
         />
 
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/academics" element={<AcademicsPage />} />
-          <Route path="/facilities" element={<FacilitiesPage />} />
-          <Route path="/facilities/:facilityId" element={<FacilityDetailPage />} />
-          <Route path="/gallery" element={<GalleryPage />} />
-          <Route path="/videos" element={<GalleryPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/faq" element={<FAQPage />} />
-          <Route path="/mission" element={<MissionPage />} />
-          <Route path="/vision" element={<VisionPage />} />
-          <Route path="/values" element={<ValuesPage />} />
-          <Route path="/diversity" element={<DiversityPage />} />
-        </Routes>
+        <div className="w-full mx-auto flex-1 p-2 sm:p-4 md:p-6 mt-4 md:mt-8 rounded-3xl bg-white/80 shadow-xl">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/academics" element={<AcademicsPage />} />
+            <Route path="/facilities" element={<FacilitiesPage />} />
+            <Route path="/facilities/:facilityId" element={<FacilityDetailPage />} />
+            <Route path="/gallery" element={<GalleryPage />} />
+            <Route path="/videos" element={<GalleryPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/faq" element={<FAQPage />} />
+            <Route path="/mission" element={<MissionPage />} />
+            <Route path="/vision" element={<VisionPage />} />
+            <Route path="/values" element={<ValuesPage />} />
+            <Route path="/diversity" element={<DiversityPage />} />
+          </Routes>
+        </div>
 
         <Footer />
       </div>
