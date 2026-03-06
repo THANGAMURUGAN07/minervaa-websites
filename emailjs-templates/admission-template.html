@@ -1,0 +1,178 @@
+<div style="font-family: system-ui, Arial, sans-serif; font-size: 13px; background-color: #f3f4f6; padding: 24px;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 560px; margin: 0 auto;">
+
+    <!-- Header -->
+    <tr>
+      <td style="background: linear-gradient(to right, #2563eb, #7c3aed); border-radius: 12px 12px 0 0; padding: 24px 20px; text-align: center;">
+        <div style="color: #ffffff; font-size: 20px; font-weight: 700; margin-bottom: 4px;">Minervaa Vidhya Mandhir School</div>
+        <div style="color: #bfdbfe; font-size: 14px;">Admission Enquiry</div>
+      </td>
+    </tr>
+
+    <!-- Body -->
+    <tr>
+      <td style="background: #ffffff; border-radius: 0 0 12px 12px; padding: 24px 20px;">
+
+        <!-- Student Photo -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="background: #eef2ff; border-radius: 10px; margin-bottom: 20px;">
+          <tr>
+            <td style="padding: 16px; text-align: center;">
+              <div style="font-size: 14px; font-weight: 700; color: #1e3a8a; margin-bottom: 12px;">Student Photo</div>
+              {{#if photo_url}}
+                <img src="{{photo_url}}" alt="Student Photo" width="100" height="100" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #6366f1; display: block; margin: 0 auto;" />
+              {{else}}
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: #dde1f0; border: 3px solid #6366f1; display: inline-block; text-align: center; line-height: 80px; font-size: 36px; margin: 0 auto;">👤</div>
+              {{/if}}
+              <div style="color: #6b7280; font-size: 11px; margin-top: 8px;">{{child_name}}</div>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Child Information -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="background: #eff6ff; border-radius: 10px; margin-bottom: 20px;">
+          <tr>
+            <td style="padding: 16px;">
+              <div style="font-size: 14px; font-weight: 700; color: #1e40af; margin-bottom: 12px;">Child Information</div>
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="50%" style="padding: 4px 0; vertical-align: top;">
+                    <span style="color: #6b7280; font-size: 11px;">Name of the Child</span><br>
+                    <span style="font-weight: 600; color: #1e293b;">{{child_name}}</span>
+                  </td>
+                  <td width="50%" style="padding: 4px 0; vertical-align: top;">
+                    <span style="color: #6b7280; font-size: 11px;">Date of Birth</span><br>
+                    <span style="font-weight: 600; color: #1e293b;">{{date_of_birth}}</span>
+                  </td>
+                </tr>
+                <tr><td colspan="2" style="padding: 6px 0;"><hr style="border: none; border-top: 1px solid #dbeafe; margin: 0;"></td></tr>
+                <tr>
+                  <td width="50%" style="padding: 4px 0; vertical-align: top;">
+                    <span style="color: #6b7280; font-size: 11px;">Sex</span><br>
+                    <span style="font-weight: 600; color: #1e293b;">{{sex}}</span>
+                  </td>
+                  <td width="50%" style="padding: 4px 0; vertical-align: top;">
+                    <span style="color: #6b7280; font-size: 11px;">Blood Group</span><br>
+                    <span style="font-weight: 600; color: #1e293b;">{{blood_group}}</span>
+                  </td>
+                </tr>
+                <tr><td colspan="2" style="padding: 6px 0;"><hr style="border: none; border-top: 1px solid #dbeafe; margin: 0;"></td></tr>
+                <tr>
+                  <td width="50%" style="padding: 4px 0; vertical-align: top;">
+                    <span style="color: #6b7280; font-size: 11px;">Contact Type</span><br>
+                    <span style="font-weight: 600; color: #1e293b;">{{contact_type}}</span>
+                  </td>
+                  <td width="50%" style="padding: 4px 0; vertical-align: top;">
+                    <span style="color: #6b7280; font-size: 11px;">Contact Number</span><br>
+                    <span style="font-weight: 600; color: #1e293b;">{{contact_number}}</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Parents / Guardian -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="background: #faf5ff; border-radius: 10px; margin-bottom: 20px;">
+          <tr>
+            <td style="padding: 16px;">
+              <div style="font-size: 14px; font-weight: 700; color: #6b21a8; margin-bottom: 12px;">Details of Parents / Guardian</div>
+              <table width="100%" cellpadding="6" cellspacing="0" style="border-collapse: collapse; font-size: 12px;">
+                <thead>
+                  <tr style="background: #e9d5ff;">
+                    <th style="text-align: left; padding: 8px; color: #6b21a8; font-size: 11px; border: 1px solid #ddd; width: 28%;"></th>
+                    <th style="text-align: center; padding: 8px; color: #6b21a8; font-size: 11px; border: 1px solid #ddd;">Father</th>
+                    <th style="text-align: center; padding: 8px; color: #6b21a8; font-size: 11px; border: 1px solid #ddd;">Mother</th>
+                    <th style="text-align: center; padding: 8px; color: #6b21a8; font-size: 11px; border: 1px solid #ddd;">Guardian</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="background: #faf5ff;">
+                    <td style="padding: 7px 8px; font-weight: 600; color: #4b5563; border: 1px solid #ddd;">Name (Capital)</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{father_name}}</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{mother_name}}</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{guardian_name}}</td>
+                  </tr>
+                  <tr style="background: #f5f3ff;">
+                    <td style="padding: 7px 8px; font-weight: 600; color: #4b5563; border: 1px solid #ddd;">Nationality</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{father_nationality}}</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{mother_nationality}}</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{guardian_nationality}}</td>
+                  </tr>
+                  <tr style="background: #faf5ff;">
+                    <td style="padding: 7px 8px; font-weight: 600; color: #4b5563; border: 1px solid #ddd;">Occupation</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{father_occupation}}</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{mother_occupation}}</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{guardian_occupation}}</td>
+                  </tr>
+                  <tr style="background: #f5f3ff;">
+                    <td style="padding: 7px 8px; font-weight: 600; color: #4b5563; border: 1px solid #ddd;">Office Address &amp; Tel</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{father_office_address}}</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{mother_office_address}}</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{guardian_office_address}}</td>
+                  </tr>
+                  <tr style="background: #faf5ff;">
+                    <td style="padding: 7px 8px; font-weight: 600; color: #4b5563; border: 1px solid #ddd;">Distance from School</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{father_distance}}</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{mother_distance}}</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{guardian_distance}}</td>
+                  </tr>
+                  <tr style="background: #f5f3ff;">
+                    <td style="padding: 7px 8px; font-weight: 600; color: #4b5563; border: 1px solid #ddd;">Permanent Address</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{father_permanent_address}}</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{mother_permanent_address}}</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{guardian_permanent_address}}</td>
+                  </tr>
+                  <tr style="background: #faf5ff;">
+                    <td style="padding: 7px 8px; font-weight: 600; color: #4b5563; border: 1px solid #ddd;">Monthly Income</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{father_income}}</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{mother_income}}</td>
+                    <td style="padding: 7px 8px; border: 1px solid #ddd; color: #1e293b;">{{guardian_income}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Academic & Transfer Information -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="background: #eef2ff; border-radius: 10px; margin-bottom: 20px;">
+          <tr>
+            <td style="padding: 16px;">
+              <div style="font-size: 14px; font-weight: 700; color: #3730a3; margin-bottom: 12px;">Academic &amp; Transfer Information</div>
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="50%" style="padding: 4px 0; vertical-align: top;">
+                    <span style="color: #6b7280; font-size: 11px;">Class to which Admission is Sought</span><br>
+                    <span style="font-weight: 600; color: #1e293b;">{{class_admission}}</span>
+                  </td>
+                  <td width="50%" style="padding: 4px 0; vertical-align: top;">
+                    <span style="color: #6b7280; font-size: 11px;">Transfer Certificate Attached</span><br>
+                    <span style="font-weight: 600; color: #1e293b;">{{tc_attached}}</span>
+                  </td>
+                </tr>
+                <tr><td colspan="2" style="padding: 8px 0;"><hr style="border: none; border-top: 1px solid #c7d2fe; margin: 0;"></td></tr>
+                <tr>
+                  <td colspan="2" style="padding: 4px 0;">
+                    <span style="color: #6b7280; font-size: 11px;">How did you know about MVM?</span><br>
+                    <span style="font-weight: 600; color: #1e293b;">{{how_know}}</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Footer -->
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="text-align: center; color: #9ca3af; font-size: 11px; padding-top: 8px;">
+              Submitted on {{submission_date}}<br>
+              Minervaa Vidhya Mandhir School — A21, A22 D Colony, Pollachi, Tamil Nadu
+            </td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+  </table>
+</div>

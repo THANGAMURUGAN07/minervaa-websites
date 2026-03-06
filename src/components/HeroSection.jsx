@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { BookOpen, Sparkles, Heart, Star, Zap, Rocket, School, ChevronRight, X, Calendar, User, Phone } from 'lucide-react';
-import API_URL from '../config/api';
+import emailjs from '@emailjs/browser';
+import { EMAILJS_SERVICE_ID, EMAILJS_TEMPLATES, EMAILJS_TO_EMAIL } from '../config/emailjs';
 
 export const HeroSection = () => {
   const [isEnquiryModalOpen, setIsEnquiryModalOpen] = useState(false);
@@ -53,26 +54,41 @@ export const HeroSection = () => {
     };
 
     try {
-      const response = await fetch(`${API_URL}/api/enquiry`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(enquiryData),
-      });
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATES.ADMISSION,
+        {
+          to_email:        EMAILJS_TO_EMAIL,
+          child_name:      enquiryData.name,
+          contact_number:  enquiryData.phone,
+          class_admission: enquiryData.admissionType + (enquiryData.standard !== 'Not specified' ? ' — ' + enquiryData.standard : ''),
+          date_of_birth:   enquiryData.dateOfBirth,
+          sex:             '-',
+          blood_group:     '-',
+          contact_type:    '-',
+          tc_attached:     '-',
+          how_know:        '-',
+          father_name: '-', father_nationality: '-', father_occupation: '-',
+          father_office_address: '-', father_distance: '-',
+          father_permanent_address: '-', father_income: '-',
+          mother_name: '-', mother_nationality: '-', mother_occupation: '-',
+          mother_office_address: '-', mother_distance: '-',
+          mother_permanent_address: '-', mother_income: '-',
+          guardian_name: '-', guardian_nationality: '-', guardian_occupation: '-',
+          guardian_office_address: '-', guardian_distance: '-',
+          guardian_permanent_address: '-', guardian_income: '-',
+          submission_date: new Date().toLocaleString(),
+        }
+      );
 
-      const data = await response.json();
-
-      if (response.ok) {
-        alert('Thank you for your enquiry! We will contact you soon.');
-        setIsEnquiryModalOpen(false);
-        setFormData({ name: '', phone: '', admissionType: '', standard: '', dateOfBirth: '' });
-      } else {
-        alert(data.error || 'Sorry, we could not send your enquiry. Please try again.');
-      }
+      alert('Thank you for your enquiry! We will contact you soon.');
+      setIsEnquiryModalOpen(false);
+      setFormData({ name: '', phone: '', admissionType: '', standard: '', dateOfBirth: '' });
     } catch (error) {
-      console.error('Enquiry form error:', error);
-      alert('Sorry, we could not send your enquiry. Please try again in a moment.');
+      const status = error?.status ?? 'unknown';
+      const text   = error?.text   ?? String(error);
+      console.error(`EmailJS error ${status}:`, text);
+      alert(`Sorry, we could not send your enquiry (${status}: ${text}). Please try again.`);
     } finally {
       setIsSubmitting(false);
     }
@@ -255,16 +271,18 @@ export const HeroSection = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Name Field */}
                 <div>
-                  <label className="block text-gray-700 font-medium mb-2">
+                  <label htmlFor="hero-name" className="block text-gray-700 font-medium mb-2">
                     <User className="w-5 h-5 inline mr-2" />
                     Full Name *
                   </label>
                   <input
+                    id="hero-name"
                     type="text"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
                     required
+                    autoComplete="name"
                     className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
                     placeholder="Enter full name"
                   />
@@ -272,16 +290,18 @@ export const HeroSection = () => {
 
                 {/* Phone Field */}
                 <div>
-                  <label className="block text-gray-700 font-medium mb-2">
+                  <label htmlFor="hero-phone" className="block text-gray-700 font-medium mb-2">
                     <Phone className="w-5 h-5 inline mr-2" />
                     Phone Number *
                   </label>
                   <input
+                    id="hero-phone"
                     type="tel"
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
                     required
+                    autoComplete="tel"
                     className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
                     placeholder="Enter phone number"
                   />
@@ -322,14 +342,16 @@ export const HeroSection = () => {
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                   >
-                    <label className="block text-gray-700 font-medium mb-2">
+                    <label htmlFor="hero-standard" className="block text-gray-700 font-medium mb-2">
                       Standard *
                     </label>
                     <select
+                      id="hero-standard"
                       name="standard"
                       value={formData.standard}
                       onChange={handleInputChange}
                       required={formData.admissionType === 'secondary'}
+                      autoComplete="off"
                       className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
                     >
                       <option value="">Select Standard</option>
@@ -344,16 +366,18 @@ export const HeroSection = () => {
 
                 {/* Date of Birth */}
                 <div>
-                  <label className="block text-gray-700 font-medium mb-2">
+                  <label htmlFor="hero-dob" className="block text-gray-700 font-medium mb-2">
                     <Calendar className="w-5 h-5 inline mr-2" />
                     Student Date of Birth *
                   </label>
                   <input
+                    id="hero-dob"
                     type="date"
                     name="dateOfBirth"
                     value={formData.dateOfBirth}
                     onChange={handleInputChange}
                     required
+                    autoComplete="off"
                     className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
                   />
                 </div>

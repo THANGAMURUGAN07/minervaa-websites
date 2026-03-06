@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Facebook, Instagram, Youtube, Send } from 'lucide-react';
-import API_URL from '../config/api';
+import emailjs from '@emailjs/browser';
+import { EMAILJS_SERVICE_ID, EMAILJS_TEMPLATES, EMAILJS_TO_EMAIL } from '../config/emailjs';
 
 export const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -18,26 +19,27 @@ export const ContactSection = () => {
 
     try {
       setIsSubmitting(true);
-      
-      const response = await fetch(`${API_URL}/api/contact`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
 
-      const data = await response.json();
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATES.CONTACT,
+        {
+          to_email:        EMAILJS_TO_EMAIL,
+          from_name:       formData.name,
+          from_email:      formData.email,
+          phone:           formData.phone || 'Not provided',
+          message:         formData.message,
+          submission_date: new Date().toLocaleString(),
+        }
+      );
 
-      if (response.ok) {
-        alert('Thank you for your message! We will contact you soon.');
-        setFormData({ name: '', email: '', phone: '', message: '' });
-      } else {
-        alert(data.error || 'Sorry, we could not send your message. Please try again.');
-      }
+      alert('Thank you for your message! We will contact you soon.');
+      setFormData({ name: '', email: '', phone: '', message: '' });
     } catch (error) {
-      console.error('Contact form error:', error);
-      alert('Sorry, we could not send your message. Please try again in a moment.');
+      const status = error?.status ?? 'unknown';
+      const text   = error?.text   ?? String(error);
+      console.error(`EmailJS error ${status}:`, text);
+      alert(`Sorry, we could not send your message (${status}: ${text}). Please try again.`);
     } finally {
       setIsSubmitting(false);
     }

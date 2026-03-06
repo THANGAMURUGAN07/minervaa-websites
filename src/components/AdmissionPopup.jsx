@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, MapPin, Phone } from 'lucide-react';
-import API_URL from '../config/api';
+import emailjs from '@emailjs/browser';
+import { EMAILJS_SERVICE_ID, EMAILJS_TEMPLATES, EMAILJS_TO_EMAIL } from '../config/emailjs';
+
 
 export const AdmissionPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,6 +76,26 @@ export const AdmissionPopup = () => {
     setShowForm(true);
   };
 
+  // Compress photo to ~150x150 JPEG so it fits within EmailJS payload limit
+  const compressPhoto = (dataUrl) =>
+    new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const SIZE = 150;
+        const canvas = document.createElement('canvas');
+        canvas.width  = SIZE;
+        canvas.height = SIZE;
+        const ctx = canvas.getContext('2d');
+        // crop to square from centre
+        const min = Math.min(img.width, img.height);
+        const sx  = (img.width  - min) / 2;
+        const sy  = (img.height - min) / 2;
+        ctx.drawImage(img, sx, sy, min, min, 0, 0, SIZE, SIZE);
+        resolve(canvas.toDataURL('image/jpeg', 0.7));
+      };
+      img.src = dataUrl;
+    });
+
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -110,45 +132,58 @@ export const AdmissionPopup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    try {
-      // Create FormData for file upload
-      const formDataToSend = new FormData();
-      
-      // Add all form fields
-      Object.keys(formData).forEach(key => {
-        formDataToSend.append(key, formData[key]);
-      });
-      
-      // Add photo file if available
-      if (studentPhoto) {
-        formDataToSend.append('photo', studentPhoto);
-      }
-      
-      const response = await fetch(`${API_URL}/api/admission`, {
-        method: 'POST',
-        body: formDataToSend,
-      });
-      
-      let data = null;
-      try {
-        data = await response.json();
-      } catch (parseError) {
-        console.warn('Non-JSON response from /api/admission:', parseError);
-      }
 
-      if (response.ok) {
-        console.log('Admission application sent successfully with photo and PDF!');
-        setShowThankYou(true);
-      } else {
-        const message = data && data.error
-          ? data.error
-          : `Failed to submit form (status ${response.status}). Please try again.`;
-        alert(message);
-      }
+    try {
+      // Compress photo if provided, otherwise use placeholder flag
+      const photo_url = photoPreview
+        ? await compressPhoto(photoPreview)
+        : '';
+
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATES.ADMISSION,
+        {
+          to_email:                   EMAILJS_TO_EMAIL,
+          photo_url,
+          child_name:                 formData.childName,
+          date_of_birth:              formData.dateOfBirth,
+          sex:                        formData.sex,
+          blood_group:                formData.bloodGroup || 'Not provided',
+          contact_number:             formData.contactNumber,
+          contact_type:               formData.contactType,
+          class_admission:            formData.classAdmission,
+          tc_attached:                formData.tcAttached,
+          how_know:                   formData.howKnow,
+          father_name:                formData.fatherName || '-',
+          father_nationality:         formData.fatherNationality || '-',
+          father_occupation:          formData.fatherOccupation || '-',
+          father_office_address:      formData.fatherOfficeAddress || '-',
+          father_distance:            formData.fatherDistance || '-',
+          father_permanent_address:   formData.fatherPermanentAddress || '-',
+          father_income:              formData.fatherIncome || '-',
+          mother_name:                formData.motherName || '-',
+          mother_nationality:         formData.motherNationality || '-',
+          mother_occupation:          formData.motherOccupation || '-',
+          mother_office_address:      formData.motherOfficeAddress || '-',
+          mother_distance:            formData.motherDistance || '-',
+          mother_permanent_address:   formData.motherPermanentAddress || '-',
+          mother_income:              formData.motherIncome || '-',
+          guardian_name:              formData.guardianName || '-',
+          guardian_nationality:       formData.guardianNationality || '-',
+          guardian_occupation:        formData.guardianOccupation || '-',
+          guardian_office_address:    formData.guardianOfficeAddress || '-',
+          guardian_distance:          formData.guardianDistance || '-',
+          guardian_permanent_address: formData.guardianPermanentAddress || '-',
+          guardian_income:            formData.guardianIncome || '-',
+          submission_date:            new Date().toLocaleString(),
+        }
+      );
+      setShowThankYou(true);
     } catch (error) {
-      console.error('Failed to send admission application:', error);
-      alert('Failed to submit form. Please try again or contact us directly.');
+      const status = error?.status ?? 'unknown';
+      const text   = error?.text   ?? String(error);
+      console.error(`EmailJS error ${status}:`, text);
+      alert(`Failed to submit form (${status}: ${text}). Please try again or contact us directly.`);
     }
   };
 
@@ -527,20 +562,22 @@ export const AdmissionPopup = () => {
                           value={formData.dateOfBirth}
                           onChange={handleInputChange}
                           required
-                          autoComplete="bday"
+                          autoComplete="off"
                           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        <label htmlFor="admit-sex" className="block text-sm font-semibold text-gray-700 mb-2">
                           Sex *
                         </label>
                         <select
+                          id="admit-sex"
                           name="sex"
                           value={formData.sex}
                           onChange={handleInputChange}
                           required
+                          autoComplete="sex"
                           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
                           <option value="">Select</option>
@@ -550,13 +587,15 @@ export const AdmissionPopup = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        <label htmlFor="admit-bloodGroup" className="block text-sm font-semibold text-gray-700 mb-2">
                           Blood Group
                         </label>
                         <select
+                          id="admit-bloodGroup"
                           name="bloodGroup"
                           value={formData.bloodGroup}
                           onChange={handleInputChange}
+                          autoComplete="off"
                           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
                           <option value="">Select Blood Group</option>
